@@ -1,0 +1,3 @@
+[submodule "inchi"]
+	path = inchi
+	url = https://github.com/metamolecular/inchi
