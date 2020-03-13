@@ -20,3 +20,8 @@ From there, you can compile this project with:
 cd inchi-wasm
 bin/build.sh
 ```
+
+# License
+
+InchI-Wasm is distributed under the terms of the MIT License. See
+[LICENSE-MIT](LICENSE-MIT) and [COPYRIGHT](COPYRIGHT) for details.
