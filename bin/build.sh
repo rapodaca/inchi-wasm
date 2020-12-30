@@ -25,6 +25,7 @@ clang \
   -Wl,-wrap,clock \
   -Wl,-export,malloc \
   -Wl,-export,molfile_to_inchi \
+  -Wl,-export,inchi_to_inchikey \
   -Wl,-no-entry \
   -DTARGET_API_LIB \
   ${PLATFORM} \

@@ -19,7 +19,7 @@
         margin-bottom: 1em;
       }
 
-      #inchi {
+      #inchi, #key {
         width: 100%;
         height: 1.5em;
         font-size: 120%;
@@ -49,19 +49,28 @@ Created with ChemWriter - https://chemwriter.com
 M  END</textarea>
     <label for="inchi">InChI:</label>
     <textarea id="inchi"></textarea>
+    <label for="key">InChI Key:</label>
+    <textarea id="key"></textarea>
     <script>
       const update = (molfile) => {
-        let result;
+        let inchi, key;
 
         try {
-          result = molfileToInChI(molfile);
+          inchi = molfileToInChI(molfile);
         } catch (e) {
           document.querySelector('#inchi').value = 'ERROR';
 
           return;
         }
 
-        document.querySelector('#inchi').value = result;
+        try {
+          key = inchiToInChIKey(inchi);
+        } catch (e) {
+          document.querySelector('#key').value = 'ERROR';
+        }
+
+        document.querySelector('#inchi').value = inchi;
+        document.querySelector('#key').value = key;
       };
 
       window.addEventListener('InChIReady', () => {
