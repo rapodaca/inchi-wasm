@@ -1,6 +1,8 @@
-Copyright (c) 2020 Metamolecular, LLC
+Copyright (c) 2021 Metamolecular, LLC
 
 For full authorship information, see the version control history.
 
-Except as otherwise noted (below and/or in individual files), ChemCore is
+Except as otherwise noted (below and/or in individual files), InChI-Wasm is
 licensed under the MIT license <LICENSE-MIT> or <http://opensource.org/licenses/MIT>.
+
+This package contains software from InChI Core Software v1.06, which is licensed under the terms of the InChI Trust License.

@@ -1,6 +1,6 @@
 # InChI-Wasm
 
-Compiles a molfile to InChI function written in C and linked to the InChI C library to WebAssembly.
+Compiles a molfile to InChI function written in C and linked to the InChI C library to WebAssembly. There is also a task to compile a macOS dylib for comparison.
 
 ## Instructions
 
@@ -18,10 +18,16 @@ From there, you can compile this project with:
 
 ```bash
 cd inchi-wasm
-bin/build.sh
+bin/build-wasm.sh
 ```
+
+Use the script `bin/build-dylib.sh` to build a macOS dynamic library. This can be used from a Node.js environment and may be helpful for benchmarking purposes. Build scripts for other platforms can uses this script as a starting point.
+
+The `build` directory contains a complete WebAssembly distribution and test. To run it start a local Web server and browse to `dist/index.html`.
 
 # License
 
 InchI-Wasm is distributed under the terms of the MIT License. See
 [LICENSE-MIT](LICENSE-MIT) and [COPYRIGHT](COPYRIGHT) for details.
+
+This project uses an unmodified copy (git submodule) of the [InChI Core Software v1.06](https://www.inchi-trust.org/downloads/), which is licensed under the terms of the [InChI Trust License](https://www.inchi-trust.org/download/106/LICENCE.pdf).

@@ -3,12 +3,38 @@
   <head>
     <meta charset="utf-8">
     <title>InChI WASM Test</title>
-    <script type="module" src="./molfile-to-inchi.js"></script>
+    <script type="module" src="./inchi-wasm.js"></script>
     <style>
+      body {
+        font-family: sans-serif;
+      }
+      .container {
+        display: flex;
+      }
+
+      .left-half {
+        flex: 4;
+        padding: 1rem;
+      }
+
+      .right-half {
+        flex: 1;
+        padding: 1rem;
+      }
+
       label {
         font-size: 120%;
         font-weight: bold;
         padding-bottom: 1em;
+      }
+
+      .right-half label {
+        font-size: 1em;
+        font-weight: normal;
+      }
+
+      .output {
+        margin-bottom :1em;
       }
 
       #molfile {
@@ -17,19 +43,31 @@
         font-size: 120%;
         font-family: monospace;
         margin-bottom: 1em;
+        white-space: pre;
+        overflow-wrap: normal;
+        overflow-x: scroll;
       }
 
-      #inchi, #key {
+      #inchi, #key, #error {
         width: 100%;
         height: 1.5em;
         font-size: 120%;
         font-family: monospace;
       }
+
+      #error {
+        height: 5em;
+      }
+      .options {
+        margin-bottom: 1em;
+      }
     </style>
   </head>
   <body>
-    <label for="molfile">Molfile:</label>
-    <textarea id="molfile">
+    <h1>InChI Wasm Test</h1>
+    <section class="container">
+      <div class="left-half">
+        <textarea id="molfile">
 
    CWRITER02282009502D
 Created with ChemWriter - https://chemwriter.com
@@ -47,40 +85,121 @@ Created with ChemWriter - https://chemwriter.com
   5  6  2  0  0  0  0
   6  1  1  0  0  0  0
 M  END</textarea>
-    <label for="inchi">InChI:</label>
-    <textarea id="inchi"></textarea>
-    <label for="key">InChI Key:</label>
-    <textarea id="key"></textarea>
+      </div>
+      <div class="right-half">
+        <div class="options">
+          <div class="option">
+            <input type="checkbox" id="newpsoff" name="NEWPSOFF">
+            <label for="newpsoff">NEWPSOFF</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="donotaddh" name="DoNotAddH">
+            <label for="donotaddh">DoNotAddH</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="snon" name="SNon">
+            <label for="snon">SNon</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="srel" name="SRel">
+            <label for="srel">SRel</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="srac" name="SRac">
+            <label for="srac">SRac</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="sucf" name="SUCF">
+            <label for="sucf">SUCF</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="suu" name="SUU">
+            <label for="suu">SUU</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="sluud" name="SLUUD">
+            <label for="sluud">SLUUD</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="recmet" name="RecMet">
+            <label for="recmet">RecMet</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="fixedh" name="FixedH">
+            <label for="fixedh">FixedH</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="ket" name="KET">
+            <label for="ket">KET</label>
+          </div>
+    
+          <div class="option">
+            <input type="checkbox" id="15t" name="15T">
+            <label for="15t">15T</label>
+          </div>
+          </div>
+      </div>
+    </section>
+    <div class="output">
+      <label for="inchi">InChI:</label>
+      <textarea id="inchi"></textarea>
+    </div>
+    <div class="output">
+      <label for="key">InChI Key:</label>
+      <textarea id="key"></textarea>
+    </div>
+    <div class="output">
+      <label for="error">Error:</label>
+      <textarea id="error"></textarea>
+    </div>
     <script>
-      const update = (molfile) => {
+      const collectOptions = () => {
+        const options = [ ];
+
+        for (let box of document.querySelectorAll('.options input')) {
+          if (box.checked) {
+            options.push(`-${box.name}`)
+          }
+        }
+
+        return options.join(' ');
+      };
+
+      const update = () => {
+        let molfile = document.querySelector('#molfile').value;
+        let options = collectOptions();
         let inchi, key;
 
         try {
-          inchi = molfileToInChI(molfile);
+          inchi = molfileToInChI(molfile, options);
+          key = inchiToInChIKey(inchi);
         } catch (e) {
-          document.querySelector('#inchi').value = 'ERROR';
+          document.querySelector('#error').value = e.message;
+          document.querySelector('#inchi').value = '';
+          document.querySelector('#key').value = '';
 
           return;
         }
 
-        try {
-          key = inchiToInChIKey(inchi);
-        } catch (e) {
-          document.querySelector('#key').value = 'ERROR';
-        }
-
         document.querySelector('#inchi').value = inchi;
         document.querySelector('#key').value = key;
+        document.querySelector('#error').value = '';
       };
 
       window.addEventListener('InChIReady', () => {
-        const molfile = document.querySelector('#molfile');
-
-        update(molfile.value);
-
-        molfile.addEventListener('input', (e) => {
-          update(molfile.value);
-        });
+        document.querySelector('#molfile').addEventListener('input', update);
+        document.querySelector('.options').addEventListener('change', update);
+        update();
       });
     </script>
   </body>

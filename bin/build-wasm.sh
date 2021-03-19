@@ -32,5 +32,5 @@ clang \
   -Iinchi/INCHI_BASE/src \
   inchi/INCHI_BASE/src/*.c \
   inchi/INCHI_API/libinchi/src/*.c \
-  src/molfile_to_inchi.c \
-  -o build/molfile_to_inchi.wasm
+  src/inchi_wasm.c \
+  -o build/inchi_wasm.wasm
